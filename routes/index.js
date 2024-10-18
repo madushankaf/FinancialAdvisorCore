@@ -1,8 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const commonControler= require("../controllers/commonControler")
+const userRoutes = require('./user');
+const dashboardRoutes = require('./dashboard');
 
-router.get('/for_only_test', commonControler.test);
-router.get('/login', commonControler.login);
-router.get('/getLead', commonControler.getLead);
-module.exports = router;
+async function routes(fastify, options) {
+    // Register user and dashboard routes
+    fastify.register(userRoutes, { prefix: '/api' });
+    fastify.register(dashboardRoutes, { prefix: '/api' });
+}
+
+module.exports = routes;

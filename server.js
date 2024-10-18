@@ -1,15 +1,25 @@
-const express = require('express');
-const app = express();
+const fastify = require('fastify')({ logger: true });
+const cors = require('@fastify/cors');
+// require("./config/db"); uncommnet to connect db
+
 const dotenv = require('dotenv'); // For managing environment variables
 dotenv.config(); // Load environment variables from .env file
 const PORT = parseInt(process.env.PORT) || 8080;
-const route=require('./routes/index');
-const cors= require('cors');
- 
-app.use(cors());
- 
-app.use('/financialAdviser',route);
- 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+const routes = require('./routes/index');
+
+
+fastify.register(cors, {
+    origin: '*',  // Allow all origins (you can modify this to restrict origins)
 });
+
+fastify.register(routes);
+
+// Start server
+fastify.listen({ port: PORT }, (err, address) => {
+    if (err) {
+        fastify.log.error(err);
+        process.exit(1);
+    }
+    fastify.log.info(`Server listening at ${address}`);
+});
+
