@@ -2,7 +2,7 @@ const responseFormatter = require("../utils/responseFormatter");
 const STATUS_CODES = require("../utils/statusCodes");
 const leadData = require("../dummyData/lead");
 
-exports.getLeadCountByType = async (req, res) => {
+exports.getLeadCountByType = async (request, reply) => {
   try {
     // Create an object to hold the counts
     const typeCounts = {};
@@ -22,9 +22,9 @@ exports.getLeadCountByType = async (req, res) => {
       count,
     }));
 
-    return res
+    return reply
       .status(STATUS_CODES.OK)
-      .json(
+      .send(
         responseFormatter(
           STATUS_CODES.OK,
           "Lead counts by type retrieved successfully",
@@ -33,9 +33,9 @@ exports.getLeadCountByType = async (req, res) => {
       );
   } catch (error) {
     console.error(error);
-    return res
+    return reply
       .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
-      .json(
+      .send(
         responseFormatter(
           STATUS_CODES.INTERNAL_SERVER_ERROR,
           "An unexpected error occurred"
@@ -44,7 +44,7 @@ exports.getLeadCountByType = async (req, res) => {
   }
 };
 
-exports.getLeadStatusCount = async (req, res) => {
+exports.getLeadStatusCount = async (request, reply) => {
   try {
     // Create an object to hold the counts
     const statusCounts = {};
@@ -64,9 +64,9 @@ exports.getLeadStatusCount = async (req, res) => {
       count,
     }));
 
-    return res
+    return reply
       .status(STATUS_CODES.OK)
-      .json(
+      .send(
         responseFormatter(
           STATUS_CODES.OK,
           "Lead status counts retrieved successfully",
@@ -75,9 +75,9 @@ exports.getLeadStatusCount = async (req, res) => {
       );
   } catch (error) {
     console.error(error);
-    return res
+    return reply
       .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
-      .json(
+      .send(
         responseFormatter(
           STATUS_CODES.INTERNAL_SERVER_ERROR,
           "An unexpected error occurred"
@@ -86,15 +86,15 @@ exports.getLeadStatusCount = async (req, res) => {
   }
 };
 
-exports.getLeadsByStatusWithPagination = async (req, res) => {
+exports.getLeadsByStatusWithPagination = async (request, reply) => {
   try {
-    const { status, page = 1, pageSize = 10 } = req.body;
+    const { status, page = 1, pageSize = 10 } = request.body;
 
     // Validate request body
     if (!status) {
-      return res
+      return reply
         .status(STATUS_CODES.BAD_REQUEST)
-        .json(
+        .send(
           responseFormatter(STATUS_CODES.BAD_REQUEST, "Status is required")
         );
     }
@@ -108,7 +108,7 @@ exports.getLeadsByStatusWithPagination = async (req, res) => {
     const offset = (page - 1) * pageSize;
     const paginatedLeads = filteredLeads.slice(offset, offset + pageSize);
 
-    return res.status(STATUS_CODES.OK).json(
+    return reply.status(STATUS_CODES.OK).send(
       responseFormatter(STATUS_CODES.OK, "Leads retrieved successfully", {
         total: totalLeads,
         totalPages: totalPages,
@@ -119,9 +119,9 @@ exports.getLeadsByStatusWithPagination = async (req, res) => {
     );
   } catch (error) {
     console.error(error);
-    return res
+    return reply
       .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
-      .json(
+      .send(
         responseFormatter(
           STATUS_CODES.INTERNAL_SERVER_ERROR,
           "An unexpected error occurred"

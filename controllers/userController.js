@@ -2,12 +2,12 @@ const responseFormatter = require("../utils/responseFormatter");
 const STATUS_CODES = require("../utils/statusCodes");
 const loginData = require("../dummyData/login");
 
-exports.getUsers = async (req, res) => {
+exports.getUsers = async (request, reply) => {
   try {
     // Respond with the list of users
-    return await res
+    return reply
       .status(STATUS_CODES.OK)
-      .json(
+      .send(
         responseFormatter(
           STATUS_CODES.OK,
           "User list retrieved successfully",
@@ -17,9 +17,9 @@ exports.getUsers = async (req, res) => {
   } catch (error) {
     // Handle unexpected errors
     console.error(error);
-    return res
+    return reply
       .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
-      .json(
+      .send(
         responseFormatter(
           STATUS_CODES.INTERNAL_SERVER_ERROR,
           "An unexpected error occurred"
@@ -28,14 +28,14 @@ exports.getUsers = async (req, res) => {
   }
 };
 
-exports.loginUser = async (req, res) => {
+exports.loginUser = async (request, reply) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = request.body;
     // Validate request body
     if (!email || !password) {
-      return res
+      return reply
         .status(STATUS_CODES.BAD_REQUEST)
-        .json(
+        .send(
           responseFormatter(
             STATUS_CODES.BAD_REQUEST,
             "Email and password are required"
@@ -50,16 +50,16 @@ exports.loginUser = async (req, res) => {
 
     if (user) {
       // Successful login
-      return res.status(STATUS_CODES.OK).json(
+      return reply.status(STATUS_CODES.OK).send(
         responseFormatter(STATUS_CODES.OK, "Login successful", {
           otp: user.otp,
         })
       );
     } else {
       // User not found
-      return res
+      return reply
         .status(STATUS_CODES.UNAUTHORIZED)
-        .json(
+        .send(
           responseFormatter(
             STATUS_CODES.UNAUTHORIZED,
             "Invalid email or password"
@@ -69,9 +69,9 @@ exports.loginUser = async (req, res) => {
   } catch (error) {
     // Handle unexpected errors
     console.error(error);
-    return res
+    return reply
       .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
-      .json(
+      .send(
         responseFormatter(
           STATUS_CODES.INTERNAL_SERVER_ERROR,
           "An unexpected error occurred"
@@ -80,15 +80,15 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-exports.sendOtp = async (req, res) => {
+exports.sendOtp = async (request, reply) => {
   try {
-    const { email } = req.body;
+    const { email } = request.body;
 
     // Validate request body
     if (!email) {
-      return res
+      return reply
         .status(STATUS_CODES.BAD_REQUEST)
-        .json(responseFormatter(STATUS_CODES.BAD_REQUEST, "Email is required"));
+        .send(responseFormatter(STATUS_CODES.BAD_REQUEST, "Email is required"));
     }
 
     // Find user based on email
@@ -96,21 +96,21 @@ exports.sendOtp = async (req, res) => {
 
     if (user) {
       // Simulate sending OTP (in a real scenario, you would send the OTP via email/SMS)
-      return res.status(STATUS_CODES.OK).json(
+      return reply.status(STATUS_CODES.OK).send(
         responseFormatter(STATUS_CODES.OK, "OTP sent successfully", {
           otp: user.otp,
         })
       );
     } else {
-      return res
+      return reply
         .status(STATUS_CODES.NOT_FOUND)
-        .json(responseFormatter(STATUS_CODES.NOT_FOUND, "User not found"));
+        .send(responseFormatter(STATUS_CODES.NOT_FOUND, "User not found"));
     }
   } catch (error) {
     console.error(error);
-    return res
+    return reply
       .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
-      .json(
+      .send(
         responseFormatter(
           STATUS_CODES.INTERNAL_SERVER_ERROR,
           "An unexpected error occurred"
@@ -119,15 +119,15 @@ exports.sendOtp = async (req, res) => {
   }
 };
 
-exports.changePassword = async (req, res) => {
+exports.changePassword = async (request, reply) => {
   try {
-    const { email, otp, newPassword } = req.body;
+    const { email, otp, newPassword } = request.body;
 
     // Validate request body
     if (!email || !otp || !newPassword) {
-      return res
+      return reply
         .status(STATUS_CODES.BAD_REQUEST)
-        .json(
+        .send(
           responseFormatter(
             STATUS_CODES.BAD_REQUEST,
             "Email, OTP, and new password are required"
@@ -143,26 +143,26 @@ exports.changePassword = async (req, res) => {
       if (user.otp === otp) {
         // Update password
         user.password = newPassword; // Update the password
-        return res
+        return reply
           .status(STATUS_CODES.OK)
-          .json(
+          .send(
             responseFormatter(STATUS_CODES.OK, "Password changed successfully")
           );
       } else {
-        return res
+        return reply
           .status(STATUS_CODES.UNAUTHORIZED)
-          .json(responseFormatter(STATUS_CODES.UNAUTHORIZED, "Invalid OTP"));
+          .send(responseFormatter(STATUS_CODES.UNAUTHORIZED, "Invalid OTP"));
       }
     } else {
-      return res
+      return reply
         .status(STATUS_CODES.NOT_FOUND)
-        .json(responseFormatter(STATUS_CODES.NOT_FOUND, "User not found"));
+        .send(responseFormatter(STATUS_CODES.NOT_FOUND, "User not found"));
     }
   } catch (error) {
     console.error(error);
-    return res
+    return reply
       .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
-      .json(
+      .send(
         responseFormatter(
           STATUS_CODES.INTERNAL_SERVER_ERROR,
           "An unexpected error occurred"
