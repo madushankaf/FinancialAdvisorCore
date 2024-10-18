@@ -1,10 +1,10 @@
-const express = require('express');
 const userRoutes = require('./user');
 const dashboardRoutes = require('./dashboard');
-const router = express.Router();
 
-// Use the user and product routes
-router.use('/api', userRoutes);
-router.use('/api', dashboardRoutes);
+async function routes(fastify, options) {
+    // Register user and dashboard routes
+    fastify.register(userRoutes, { prefix: '/api' });
+    fastify.register(dashboardRoutes, { prefix: '/api' });
+}
 
-module.exports = router;
+module.exports = routes;

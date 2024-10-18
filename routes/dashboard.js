@@ -1,9 +1,10 @@
-const express = require('express');
-const router = express.Router();
 const { dashboardController } = require('../controllers');
-// Define product routes
-router.get('/dashboard/leadTypeOverview', dashboardController.getLeadCountByType);
-router.get('/dashboard/leadStatusOverview', dashboardController.getLeadStatusCount);
-router.post('/dashboard/leadStatusWithPagination', dashboardController.getLeadsByStatusWithPagination);
 
-module.exports = router;
+async function dashboardRoutes(fastify, options) {
+    // Define dashboard routes
+    fastify.get('/dashboard/leadTypeOverview', dashboardController.getLeadCountByType);
+    fastify.get('/dashboard/leadStatusOverview', dashboardController.getLeadStatusCount);
+    fastify.post('/dashboard/leadStatusWithPagination', dashboardController.getLeadsByStatusWithPagination);
+}
+
+module.exports = dashboardRoutes;
