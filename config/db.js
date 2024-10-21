@@ -10,9 +10,9 @@ const client = new Client({
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
   database: process.env.DB_NAME,
-  ssl: {
-    ca: caCert,
-  },
+  // ssl: {
+  //   ca: caCert,
+  // },
 });
 
 async function connectToDatabase() {
