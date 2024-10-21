@@ -5,7 +5,7 @@ endpoints:
   - name: financial-advisor-core
     type: REST
     networkVisibility: Public
-    context: /api
+    context: /
     basePath: /api
     service:
       port: 8080

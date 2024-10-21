@@ -4,45 +4,44 @@ info:
   version: 1.0.0
 paths:
   /users/login:
-    get:
-      summary: login api
-      requestBody:
-        required: true
+  post:
+    summary: login api
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              userName:
+                type: string
+              password:
+                type: string
+            required:
+              - userName
+              - password
+    responses:
+      '200':
+        description: Successful retrieval
         content:
           application/json:
             schema:
               type: object
               properties:
-                userName:
+                status:
                   type: string
-                password:
+                data:
+                  type: array
+                  items:
+                    type: object
+      '400':
+        description: Bad request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
                   type: string
-              required:
-                - userName
-                - password
-      responses:
-        '200':
-          description: Successful retrieval
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                  data:
-                    type: array
-                    items:
-                      type: object
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                  message:
-                    type: string
-  
+                message:
+                  type: string
