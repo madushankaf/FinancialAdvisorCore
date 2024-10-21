@@ -1,6 +1,15 @@
 apiVersion: core.choreo.dev/v1beta1
 kind: ComponentConfig
 schemaVersion: 1.1
+endpoints:
+  - name: financial-advisor-core
+    type: REST
+    networkVisibility: Public
+    rest:
+      basePath: /api
+    service:
+      port: 8080
+    schemaFilePath: openapi.yaml
 spec:
   inbound:
     endpoints:
