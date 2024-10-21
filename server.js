@@ -1,6 +1,6 @@
 const fastify = require('fastify')({ logger: true });
 const cors = require('@fastify/cors');
-// require("./config/db"); uncommnet to connect db
+const {connectToDatabase} = require("./config/db"); //uncommnet to connect db
 
 const dotenv = require('dotenv'); // For managing environment variables
 dotenv.config(); // Load environment variables from .env file
@@ -15,11 +15,12 @@ fastify.register(cors, {
 fastify.register(routes);
 
 // Start server
-fastify.listen({ port: PORT }, (err, address) => {
+fastify.listen({ port: PORT },async (err, address) => {
     if (err) {
         fastify.log.error(err);
         process.exit(1);
     }
+    await connectToDatabase();
     fastify.log.info(`Server listening at ${address}`);
 });
 

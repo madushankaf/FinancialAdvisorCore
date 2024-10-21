@@ -1,19 +1,35 @@
 const responseFormatter = require("../utils/responseFormatter");
 const STATUS_CODES = require("../utils/statusCodes");
 const loginData = require("../dummyData/login");
+const { tokenService } = require("../services");
+const {userProfile} = require("../db")
 
 exports.getUsers = async (request, reply) => {
   try {
     // Respond with the list of users
-    return reply
-      .status(STATUS_CODES.OK)
-      .send(
-        responseFormatter(
-          STATUS_CODES.OK,
-          "User list retrieved successfully",
-          loginData
-        )
-      );
+    const user = await userProfile.getUsers();
+    if(user){
+        return reply
+        .status(STATUS_CODES.OK)
+        .send(
+          responseFormatter(
+            STATUS_CODES.OK,
+            "User list retrieved successfully",
+            user
+          )
+        );
+    }else{
+        return reply
+        .status(STATUS_CODES.OK)
+        .send(
+          responseFormatter(
+            STATUS_CODES.OK,
+            "no data found",
+            {}
+          )
+        );
+    }
+
   } catch (error) {
     // Handle unexpected errors
     console.error(error);
@@ -30,31 +46,50 @@ exports.getUsers = async (request, reply) => {
 
 exports.loginUser = async (request, reply) => {
   try {
-    const { email, password } = request.body;
+    const { userName, password } = request.body;
     // Validate request body
-    if (!email || !password) {
+    if (!userName || !password) {
       return reply
         .status(STATUS_CODES.BAD_REQUEST)
         .send(
           responseFormatter(
             STATUS_CODES.BAD_REQUEST,
-            "Email and password are required"
+            "userName and password are required"
           )
         );
     }
 
     // Find user based on email and password
     const user = loginData.find(
-      (user) => user.email === email && user.password === password
+      (user) => user.userName === userName && user.password === password
     );
 
     if (user) {
       // Successful login
-      return reply.status(STATUS_CODES.OK).send(
-        responseFormatter(STATUS_CODES.OK, "Login successful", {
-          otp: user.otp,
-        })
-      );
+      const getUserAccessToken = await tokenService.getUserAccessToken({
+        userName,
+        password,
+      });
+      if (!getUserAccessToken.hasOwnProperty("token_type")) {
+        return reply
+          .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
+          .send(
+            responseFormatter(
+              STATUS_CODES.INTERNAL_SERVER_ERROR,
+              "An unexpected error occurred"
+            )
+          );
+      } else {
+        return reply
+          .status(STATUS_CODES.OK)
+          .send(
+            responseFormatter(
+              STATUS_CODES.OK,
+              "Login successful",
+              getUserAccessToken
+            )
+          );
+      }
     } else {
       // User not found
       return reply
@@ -68,7 +103,7 @@ exports.loginUser = async (request, reply) => {
     }
   } catch (error) {
     // Handle unexpected errors
-    console.error(error);
+    console.log(error);
     return reply
       .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
       .send(

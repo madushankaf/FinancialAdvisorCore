@@ -1,0 +1,9 @@
+version: 0.1
+
+endpoints:
+  - name: Financial Advisor core
+    port: 8080
+    type: REST
+    networkVisibility: Public
+    context: /api
+    schemaFilePath: openapi.yml
