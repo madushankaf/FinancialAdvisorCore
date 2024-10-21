@@ -1,16 +1,3 @@
-# schemaVersion: 1.0
-# version: 0.1
-
-# endpoints:
-#   - name: financial-advisor-core
-#     type: REST
-#     networkVisibility: Public
-#     rest:
-#       basePath: /api
-#     service:
-#       port: 8080
-#     schemaFilePath: openapi.yaml
-
 schemaVersion: 1.0
 
 # +optional Incoming connection details for the component
@@ -23,17 +10,9 @@ endpoints:
   service:
     # +required Base path of the API that gets exposed via the endpoint.
     basePath: /api
-    # +required Numeric port value that gets exposed via the endpoint
     port: 8080
     # +required Type of traffic that the endpoint is accepting.
     # Allowed values: REST, GraphQL, GRPC, TCP, UDP, WS.
     type: REST
-  # +optional Network level visibilities of the endpoint.
-  # Accepted values: Project|Organization|Public(Default).
-  networkVisibilities:
-    - Public
-    - Organization
-  # +optional Path to the schema definition file. Defaults to wild card route if not provided
-  # This is only applicable to REST and WS endpoint types.
-  # The path should be relative to the docker context.
+  networkVisibilities: Public
   schemaFilePath: openapi.yaml
