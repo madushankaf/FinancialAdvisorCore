@@ -1,0 +1,26 @@
+apiVersion: core.choreo.dev/v1beta1
+kind: ComponentConfig
+spec:
+  inbound:
+    - name: financial-advisor-core
+      port: 8080
+      type: REST
+      networkVisibility: Public
+      context: /api
+      schemaFilePath: openapi.yaml  # Path to your OpenAPI schema file
+
+  outbound:
+    serviceReferences:
+      - name: database:yourPostgresDB  # Replace with your actual database service name
+        connectionConfig: 01ef700c-e378-138e-a11f-6e8e5a924f54  # Replace with your actual connection config ID
+        env:
+          - from: HostName
+            to: DB_HOST
+          - from: Port
+            to: DB_PORT
+          - from: Username
+            to: DB_USER
+          - from: Password
+            to: DB_PASSWORD
+          - from: DatabaseName
+            to: DB_NAME

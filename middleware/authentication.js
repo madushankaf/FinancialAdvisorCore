@@ -1,16 +1,20 @@
-const roleAuthenticate = async (request, reply) => {
-    const token = request.headers['authorization']?.split(' ')[1];
-
-    if (!token) {
-        return reply.status(401).send({ message: 'No token provided!' });
-    }
-
-    try {
-        const decoded = jwt.verify(token, Constants.JWT_SECRET);
-        request.user = decoded; // Attach the user data to the request object
-    } catch (err) {
-        return reply.status(403).send({ message: 'Failed to authenticate token.' });
-    }
+const authentication = async (request, reply) => {
+  const accessToken = request.headers["authorization"]?.split(" ")[1];
+  if (!accessToken) {
+    return reply.status(401).send({ message: "No token provided!" });
+  }
+  
+  try {
+    const jwtToken = accessToken.split(".");
+    // Decode the JWT token
+    const decoded = JSON.parse(
+      Buffer.from(jwtToken[1], "base64").toString("utf8")
+    );
+    request.user = decoded; // Attach the user data to the request object
+    console.log(request.user);
+  } catch (err) {
+    return reply.status(403).send({ message: "Failed to authenticate token." });
+  }
 };
 
-module.exports = {roleAuthenticate}
+module.exports = { authentication };
