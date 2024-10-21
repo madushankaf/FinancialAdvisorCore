@@ -1,18 +1,10 @@
-schemaVersion: 1.0
-
-# +optional Incoming connection details for the component
-endpoints:
-  # +required Unique name for the endpoint.
-  name: financial-advisor-core
-  # +optional Display name for the endpoint.
-  displayName: financial-advisor-core
-  # +required Service section has the user service endpoint details
-  service:
-    # +required Base path of the API that gets exposed via the endpoint.
-    basePath: /api
-    port: 8080
-    # +required Type of traffic that the endpoint is accepting.
-    # Allowed values: REST, GraphQL, GRPC, TCP, UDP, WS.
-    type: REST
-  networkVisibilities: Public
-  schemaFilePath: openapi.yaml
+apiVersion: core.choreo.dev/v1beta1
+kind: ComponentConfig
+spec:
+  inbound:
+    - name: financial-advisor-core
+      port: 8080
+      type: REST
+      networkVisibility: Public
+      context: /api
+      schemaFilePath: openapi.yaml
