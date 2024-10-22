@@ -1,6 +1,5 @@
 apiVersion: core.choreo.dev/v1beta1
 kind: ComponentConfig
-schemaVersion: 1.0
 spec:
   inbound:
     - name: financial-advisor-core
