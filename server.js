@@ -21,6 +21,6 @@ fastify.listen({ port: 8080, host: '0.0.0.0' }, (err) => {
         process.exit(1);
     }
    // await connectToDatabase();
-    fastify.log.info(`Server listening at ${address}`);
+    fastify.log.info(`Server listening`);
 });
 
