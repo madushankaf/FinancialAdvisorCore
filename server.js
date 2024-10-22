@@ -15,12 +15,12 @@ const routes = require('./routes/index');
 fastify.register(routes);
 
 // Start server
-fastify.listen({ port: PORT },async (err, address) => {
+fastify.listen({ port: PORT }, (err, address) => {
     if (err) {
         fastify.log.error(err);
         process.exit(1);
     }
-    //await connectToDatabase();
+   // await connectToDatabase();
     fastify.log.info(`Server listening at ${address}`);
 });
 
