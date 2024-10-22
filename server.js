@@ -15,7 +15,7 @@ const routes = require('./routes/index');
 fastify.register(routes);
 
 // Start server
-fastify.listen({ port: PORT }, (err, address) => {
+fastify.listen({ port: 8080 }, (err, address) => {
     if (err) {
         fastify.log.error(err);
         process.exit(1);
