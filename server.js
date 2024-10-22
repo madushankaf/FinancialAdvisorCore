@@ -20,7 +20,7 @@ fastify.listen({ port: PORT },async (err, address) => {
         fastify.log.error(err);
         process.exit(1);
     }
-    await connectToDatabase();
+    //await connectToDatabase();
     fastify.log.info(`Server listening at ${address}`);
 });
 
