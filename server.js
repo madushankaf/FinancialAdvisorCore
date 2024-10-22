@@ -8,9 +8,9 @@ const PORT = parseInt(process.env.PORT) || 8080;
 const routes = require('./routes/index');
 
 
-fastify.register(cors, {
-    origin: '*',  // Allow all origins (you can modify this to restrict origins)
-});
+// fastify.register(cors, {
+//     origin: '*',  // Allow all origins (you can modify this to restrict origins)
+// });
 
 fastify.register(routes);
 
